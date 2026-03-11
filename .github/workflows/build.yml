@@ -1,0 +1,56 @@
+name: Build and Run
+
+env:
+  VERSION: 0.1.0
+  DEV_IMAGE_NAME: nc-inspect-dev
+  BUILD_IMAGE_NAME: nc-inspect-build
+  USER_IMAGE_NAME: nc-inspect-user
+
+on:
+  push:
+    branches:
+      - main
+    paths: 
+      - '.github/workflows/**'
+      - 'docker/**'
+      - 'src/**'
+      - '.gitignore'
+
+jobs:
+  docker-build-jammy:
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Build jammy
+        run: |
+          UBUNTU=jammy
+          docker build \
+          --build-arg VERSION=${VERSION} \
+          --build-arg UBUNTU=${UBUNTU} \
+          --target export \
+          --output type=local,dest=dist \
+          -t $BUILD_IMAGE_NAME:${UBUNTU} \
+          -f ${{ github.workspace }}/docker/Dockerfile \
+          ${{ github.workspace }}
+
+  docker-build-noble:
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Build noble
+        run: |
+          UBUNTU=noble
+          docker build \
+          --build-arg VERSION=${VERSION} \
+          --build-arg UBUNTU=${UBUNTU} \
+          --target export \
+          --output type=local,dest=dist \
+          -t $BUILD_IMAGE_NAME:${UBUNTU} \
+          -f ${{ github.workspace }}/docker/Dockerfile \
+          ${{ github.workspace }}

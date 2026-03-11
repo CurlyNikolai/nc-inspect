@@ -1,0 +1,8 @@
+.vscode
+build
+docker
+LICENSE
+dist
+*.deb
+.git
+.github
