@@ -68,5 +68,14 @@ FROM ubuntu:${UBUNTU} AS user
 ARG VERSION=0.1.0
 COPY --from=build /src/build/nc-inspect-*.deb /
 RUN apt-get update && \
-    DEBIAN_FRONTEND=noninteractive apt-get install -y ./nc-inspect-*.deb && \
+    DEBIAN_FRONTEND=noninteractive apt-get install -y \
+    ./nc-inspect-*.deb \
+    libgl1 \
+    libglfw3 \
+    libx11-6 \
+    libxrandr2 \
+    libxinerama1 \
+    libxcursor1 \
+    libxi6 \
+    libxss1 && \
     rm -rf /var/lib/apt/lists/*
